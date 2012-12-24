@@ -1,0 +1,96 @@
+datovka2email
+=============
+
+Script for unattended downloading and e-mailing of all sent and received
+messages in the "Datove schranky" system.
+
+Background
+----------
+
+Since 2009, an electronic messaging system is in use by all Czech state
+authorities.  It's called Datové schránky (Data boxes) or Datovky (informal,
+plural) and the goal was to replace the paper correspondence.  Everyone can
+have his/her own Data box, but official institutions and other subjects like
+legal entities in the Commercial Register, attorneys or tax consultants are
+obliged to receive documents through their Data boxes.
+
+While the Data boxes system uses the Internet as a carrier, the protocol is
+independent of any commonly used systems such as E-mail despite the fact how
+close is the incentive and usage.
+
+CZ.NIC is an interest association of legal entities, founded in 1998 by
+Czech leading ISPs.  The key activities of the association include operation
+of the CZ top-level domain as well as its registry.  It also conducts public
+education.
+
+CZ.NIC Labs is, among other stuff, developing the Datovka GUI app, which is
+user friendly, multiplarform, feature rich and can be used for all usual
+Data box management tasks.  It is open sourced, written in Python and split
+to libraries so everyone can study and extend the code.
+
+The author of this script has no connection to CZ.NIC.
+
+One feature that is commonly requested by users is missing though:
+forwarding all newly found received and sent Data box messages to a given
+e-mail.  There are several commercial services for that, but they of course
+need access to your Data box.
+
+The `datovka2email' script adds this feature for free. Unfortunately
+`datovka' can't be sufficiently governed from the command line, it also has
+no plug-ins support, so it is hacked to certain extent.
+
+Requirements
+------------
+
+`datovka' package from https://labs.nic.cz/page/969/datovka/ and other
+packages it requires.  Tested and works with datovka versions 2.1.2 through
+3.0.2.
+
+Developed and tested on Linux. No known limitation for running on other
+Operating systems.  Please report.
+
+Running
+-------
+
+The goal is to simply run `datovka2email' to automatically download, store
+and e-mail all new messages.  To accomplish that several steps needs to be
+done.
+
+First you configure the accounts of interest using the `datovka'
+application.  That will create create the proper dsgui.conf configuration
+file.  DON'T FORGET TO ALLOW STORING THE PASSWORDS in the file!
+
+`datovka2email' relies on the data files in the ~/.dsgui directory managed
+by `datovka'.  Only messages that were not previously downloaded there can
+be sent to e-mail.
+
+Then you set the constants in the script code:
+
+   SMTP_SERVER - hostname or IP address of the SMTP server accepting mail from you
+   SMTP_SENDER - e-mail address to be put to From: header and envelope
+   SMTP_RECIPIENT_FOR_SENT,
+   SMTP_RECIPIENT_FOR_RECEIVED - e-mail addresses where sent/received
+                                       messages will be sent
+
+Please note: The sent e-mails `Date' header is matched to the date of the
+source Data box message.  The list of attachments is added to the message
+body, which is also switched to quoted-printable encoding.  The accents are
+stripped from the attachment filenames to help e-mail processing software
+that is not accents friendly.
+
+While this program starts the GTK graphical interface, it does its best to
+be run unattended.  The main UI loop is not started, instead the required
+actions are forced just after start.  Then the app is ended.  The exceptions
+are printed to stderr.
+
+On a server without X, it is possible to install the `xvfb' package and run
+`datovka2email' like this:
+
+     xvfb-run datovka2email.py
+
+Also it is recommended to use locking in order to avoid simultaneous executions.
+
+Author
+------
+
+Vlada Macek <macek@sandbox.cz>, dev started in Sep 2012
