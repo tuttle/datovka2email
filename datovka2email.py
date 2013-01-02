@@ -255,5 +255,6 @@ class DatovkaToEmail(GUI):
         print >>sys.stderr, message
 
 
-app = DatovkaToEmail()
-app.pop_and_sendmail()
+if __name__ == '__main__':
+    app = DatovkaToEmail()
+    app.pop_and_sendmail()

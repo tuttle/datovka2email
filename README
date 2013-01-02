@@ -57,8 +57,8 @@ and e-mail all new messages.  To accomplish that several steps needs to be
 done.
 
 First you configure the accounts of interest using the `datovka'
-application.  That will create create the proper dsgui.conf configuration
-file.  DON'T FORGET TO ALLOW STORING THE PASSWORDS in the file!
+application.  That will create proper dsgui.conf configuration file.
+DON'T FORGET TO ALLOW STORING THE PASSWORDS in the file!
 
 `datovka2email' relies on the data files in the ~/.dsgui directory managed
 by `datovka'.  Only messages that were not previously downloaded there can
